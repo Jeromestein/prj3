@@ -1,0 +1,237 @@
+@use 'sass:color';
+@use './variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: $font-family-base;
+  background: radial-gradient(circle at top, #111827 0%, $color-background 55%);
+  color: $color-text;
+  min-height: 100vh;
+}
+
+a {
+  color: $color-accent;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-accent-strong;
+  }
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.app-header {
+  backdrop-filter: blur(10px);
+  background-color: color.scale($color-surface, $alpha: -20%);
+  border-bottom: 1px solid color.scale($color-surface, $lightness: 20%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+
+  .brand a {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: $color-text;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+      color: $color-text-muted;
+      font-weight: 500;
+
+      &.active {
+        color: $color-text;
+      }
+    }
+
+    .link-button {
+      background: transparent;
+      border: none;
+      color: $color-text-muted;
+      font: inherit;
+      cursor: pointer;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      transition: background 150ms ease;
+
+      &:hover {
+        background: color.scale($color-surface, $lightness: 10%);
+        color: $color-text;
+      }
+    }
+
+    .user-chip {
+      background: color.scale($color-surface, $lightness: 10%);
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      color: $color-text;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.app-content {
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.page-card {
+  width: min(420px, 100%);
+  background: $color-surface;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.3);
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+}
+
+.card {
+  background: $color-surface-alt;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+
+  dl {
+    margin: 0;
+
+    div {
+      margin-bottom: 1rem;
+    }
+
+    dt {
+      font-weight: 600;
+      color: $color-text-muted;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    dd {
+      margin: 0.25rem 0 0;
+      font-size: 1rem;
+    }
+  }
+}
+
+.auth-form {
+  display: grid;
+  gap: 1rem;
+
+  h1 {
+    text-align: center;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    color: $color-text-muted;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border-radius: 12px;
+    border: 1px solid color.scale($color-surface, $lightness: 25%);
+    background: color.scale($color-surface, $lightness: 10%);
+    color: $color-text;
+    font-size: 1rem;
+
+    &:focus {
+      outline: 2px solid $color-accent;
+      outline-offset: 1px;
+    }
+  }
+
+  .form-error {
+    background: color.scale($color-danger, $lightness: -10%);
+    color: $color-text;
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+  color: $color-text-muted;
+}
+
+.primary-button,
+.secondary-button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, $color-accent, $color-accent-strong);
+  color: $color-text;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.7;
+  }
+}
+
+.secondary-button {
+  background: color.scale($color-surface, $lightness: 15%);
+  color: $color-text;
+
+  &:hover {
+    background: color.scale($color-surface, $lightness: 30%);
+  }
+}
+
+.center-card {
+  text-align: center;
+  color: $color-text-muted;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
