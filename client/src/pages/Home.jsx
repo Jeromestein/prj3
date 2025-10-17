@@ -119,11 +119,18 @@ const Home = () => {
           <div>
             <h4>About</h4>
             <ul>
-              {['Shop', 'Authors', 'Sitemap', 'Contact'].map((item) => (
-                <li key={item}>
-                  <Link to="/">{item}</Link>
-                </li>
-              ))}
+              <li>
+                <Link to="/">Shop</Link>
+              </li>
+              <li>
+                <Link to="/">Authors</Link>
+              </li>
+              <li>
+                <Link to="/">Sitemap</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
             </ul>
           </div>
         </div>
