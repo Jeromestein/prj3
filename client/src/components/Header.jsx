@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className="app-header">
       <div className="brand">
-        <NavLink to="/">Modern Auth</NavLink>
+        <NavLink to="/">Modern Blog Website</NavLink>
       </div>
       <nav className="nav-links">
         <NavLink to="/">Home</NavLink>

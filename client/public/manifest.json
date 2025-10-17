@@ -1,6 +1,6 @@
 {
-  "name": "Modern Auth App",
-  "short_name": "AuthApp",
+  "name": "Modern Blog Website",
+  "short_name": "Blog Website",
   "description": "A secure React PWA with Express and MongoDB backend.",
   "start_url": "/",
   "display": "standalone",

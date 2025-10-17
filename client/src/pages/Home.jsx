@@ -58,13 +58,6 @@ const Home = () => {
       <section className="post-section">
         <header className="section-header">
           <h2>Latest insights</h2>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/">Categories</Link>
-            <Link to="/">Authors</Link>
-            <Link to="/">Shop</Link>
-            <Link to="/">Contact</Link>
-          </nav>
         </header>
 
         <div className="post-grid">
