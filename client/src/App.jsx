@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Contact from './pages/Contact';
+import Posts from './pages/Posts';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 
@@ -13,6 +14,7 @@ const App = () => (
     <main className="app-content">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/posts" element={<Posts />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/contact" element={<Contact />} />

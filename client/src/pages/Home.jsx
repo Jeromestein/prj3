@@ -81,16 +81,12 @@ const Home = () => {
 
       <footer className="site-footer">
         <div className="footer-brand">
-          <p className="brand-name">@ Your Company</p>
+          <p className="brand-name">@ Jiayi Wang</p>
           <p>
             Donec nec ante nibh. Vestibulum tincidunt lectus sed magna fringilla sagittis. Nulla
             facilisi.
           </p>
-          <p className="legal">© 2022 Your Company. All rights reserved.</p>
-          <nav className="legal-links">
-            <Link to="/">Terms of Service</Link>
-            <Link to="/">Privacy Policy</Link>
-          </nav>
+          <p className="legal">© 2025 Jiayi Wang. All rights reserved.</p>
         </div>
 
         <div className="footer-columns">
