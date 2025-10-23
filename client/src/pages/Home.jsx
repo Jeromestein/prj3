@@ -1,82 +1,123 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { fetchPosts } from '../api/posts';
+import { handleApiError } from '../api/client';
 
-const featuredPost = {
-  title: '10 Tips for Designing a Professional Wireframe',
-  category: 'Design',
+const fallbackHero = {
+  category: 'AI STRATEGY',
+  title: 'Designing an AI-native publishing stack',
   excerpt:
-    'Modern wireframes balance clarity and speed. Explore practical guidelines to help your next concept session ship faster.',
-  cta: 'Read more',
+    'Discover how modern teams productionize AI safely - from data pipelines to guardrails and continuous evaluation.',
+  cta: 'Explore playbook',
+  link: '/posts',
 };
 
-const articles = [
-  {
-    imageUrl: '/images/placeholder-1.jpg',
-    title: 'How to Overcome Creative Blocks & Find Inspiration',
-    author: 'Anna Maria Lopez',
-    date: 'Mar 15, 2022',
-    readTime: '8 min read',
-    excerpt:
-      'Stagnant brief? Try these proven prompts inspired by product teams shipping weekly releases.',
-  },
-  {
-    imageUrl: '/images/placeholder-2.jpg',
-    title: 'Unusual Uses for Everyday Household Items',
-    author: 'Bob Jones',
-    date: 'Feb 12, 2022',
-    readTime: '5 min read',
-    excerpt:
-      'Repurpose the mundane: twenty small hacks that save setup time, streamline workflow, and cut costs.',
-  },
-  {
-    imageUrl: '/images/placeholder-3.jpg',
-    title: 'Spectacular Natural Wonders Everyone Should See',
-    author: 'John Alvarez',
-    date: 'Mar 24, 2022',
-    readTime: '6 min read',
-    excerpt:
-      'Refuel your creativity by exploring landscapes that have shaped design palettes across industries.',
-  },
-];
+const formatDate = (isoDate) =>
+  new Date(isoDate).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data } = await fetchPosts({ sort: 'date' });
+        if (!isMounted) {
+          return;
+        }
+        setPosts((data.posts || []).slice(0, 3));
+      } catch (err) {
+        if (isMounted) {
+          setError(handleApiError(err));
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const heroPost = posts[0];
+  const heroCategory = heroPost?.topic ?? fallbackHero.category;
+  const heroTitle = heroPost?.title ?? fallbackHero.title;
+  const heroExcerpt = heroPost?.excerpt ?? fallbackHero.excerpt;
+  const heroLink = heroPost ? `/posts/${heroPost.slug || heroPost._id}` : fallbackHero.link;
+  const heroCta = heroPost ? 'Read insight' : fallbackHero.cta;
+
+  const latestPosts = useMemo(() => posts.slice(0, 3), [posts]);
 
   return (
     <div className="home-page">
       <section className="hero-card">
         <div className="hero-content">
-          <p className="hero-category">{featuredPost.category}</p>
-          <h1>{featuredPost.title}</h1>
-          <p className="hero-excerpt">{featuredPost.excerpt}</p>
-          <Link className="primary-button" to="/">
-            {featuredPost.cta}
+          <span className="hero-badge">AI</span>
+          <p className="hero-category">{heroCategory}</p>
+          <h1>{heroTitle}</h1>
+          <p className="hero-excerpt">{heroExcerpt}</p>
+          <Link className="primary-button" to={heroLink}>
+            {heroCta}
           </Link>
         </div>
       </section>
 
       <section className="post-section">
         <header className="section-header">
-          <h2>Latest insights</h2>
+          <h2>Latest AI insights</h2>
         </header>
 
-        <div className="post-grid">
-          {articles.map((article) => (
-            <article key={article.title} className="post-card">
-              <div className="image-placeholder" aria-hidden="true" style={{ backgroundImage: `url(${article.imageUrl})` }}>
-                <img src={article.imageUrl} alt={article.title} style={{ display: 'none' }} />
-              </div>
-              <h3>{article.title}</h3>
-              <p className="meta">
-                {article.author} &bull; {article.date} &bull; {article.readTime}
-              </p>
-              <p>{article.excerpt}</p>
-              <Link className="text-link" to="/">
-                Continue reading →
-              </Link>
-            </article>
-          ))}
-        </div>
+        {loading && (
+          <div className="center-card">
+            <p>Loading signals...</p>
+          </div>
+        )}
+
+        {error && !loading && (
+          <div className="center-card">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && latestPosts.length === 0 && (
+          <div className="center-card">
+            <p>No posts yet. Be the first to publish an AI update.</p>
+          </div>
+        )}
+
+        {!loading && !error && latestPosts.length > 0 && (
+          <div className="post-grid">
+            {latestPosts.map((article) => (
+              <article key={article.id || article._id} className="post-card">
+                <div className="post-card__tag">{article.topic}</div>
+                <h3>{article.title}</h3>
+                <p className="meta">
+                  {article.authorName} &bull; {formatDate(article.createdAt)} &bull;{' '}
+                  {article.readTime}
+                </p>
+                <p>{article.excerpt}</p>
+                <Link className="text-link" to={`/posts/${article.slug || article.id}`}>
+                  Read more &rarr;
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <footer className="site-footer">
@@ -93,13 +134,11 @@ const Home = () => {
           <div>
             <h4>Tags</h4>
             <ul className="tag-cloud">
-              {['Health', 'Lifestyle', 'Social', 'Entertainment', 'News', 'Books', 'Design'].map(
-                (tag) => (
-                  <li key={tag}>
-                    <Link to="/">{tag}</Link>
-                  </li>
-                )
-              )}
+              {['Model Ops', 'Edge AI', 'Safety', 'Agents', 'Data Quality', 'Research'].map((tag) => (
+                <li key={tag}>
+                  <Link to="/posts">{tag}</Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>

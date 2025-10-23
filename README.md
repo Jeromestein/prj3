@@ -129,6 +129,8 @@ Session data lives in MongoDB via `connect-mongo`, and the React client always c
 ## Posts Workflow
 
 - Posts are persisted in the `Post` collection with title, slug, topic, excerpt, read time, Markdown body, author references, and timestamps.
+- During boot the server seeds three AI-themed showcase posts (Anthropic Skills, ChatGPT Atlas, Nano Banana) if the collection is empty, ensuring `/posts` and the homepage have fresh content.
+- A default author account `ai-editor@modernblog.com` / `ChangeMe123!` is created for the seeded content—change or remove this credential in production.
 - Slugs are generated server-side (`generateSlug`) and remain unique across edits.
 - Authors can manage their own content only; every mutation route verifies the current session user before proceeding.
 - Markdown content is stored as plain text in MongoDB and rendered client-side with GitHub Flavored Markdown support.

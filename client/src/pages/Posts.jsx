@@ -115,14 +115,14 @@ const Posts = () => {
 
       {!loading && !error && posts.length === 0 && (
         <div className="center-card">
-          <p>No posts yet—be the first to share what you&apos;re working on.</p>
+          <p>No posts yet - be the first to share what you&apos;re working on.</p>
           {isAuthenticated ? (
             <Link to="/posts/new" className="primary-button">
               Publish now
             </Link>
           ) : (
             <Link to="/signup" className="text-link">
-              Create an account to start publishing →
+              Create an account to start publishing &rarr;
             </Link>
           )}
         </div>
@@ -142,7 +142,7 @@ const Posts = () => {
               <p className="excerpt">{post.excerpt}</p>
               <p className="byline">By {post.authorName}</p>
               <Link to={`/posts/${post.slug || post._id}`} className="text-link">
-                Read more →
+                Read more &rarr;
               </Link>
             </article>
           ))}

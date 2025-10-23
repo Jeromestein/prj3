@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 
 const connectDB = require('./src/config/db');
 const createApp = require('./src/app');
+const ensureInitialPosts = require('./src/seeds/ensurePosts');
 
 dotenv.config({ path: path.resolve(__dirname, 'config.env') });
 
@@ -53,6 +54,7 @@ const loadSslConfig = () => {
 const startServer = async () => {
   try {
     await connectDB(MONGODB_URI);
+    await ensureInitialPosts();
 
     const app = createApp({
       mongoUri: MONGODB_URI,
