@@ -81,6 +81,26 @@ const resolveIdentifier = (postIdOrSlug) => {
   return { slug: postIdOrSlug };
 };
 
+const listMyPosts = async (req, res) => {
+  if (!req.currentUser) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+
+  const { sort = 'date' } = req.query;
+
+  try {
+    const posts = await Post.find({ authorId: req.currentUser._id })
+      .sort(buildSort(sort))
+      .lean()
+      .exec();
+
+    return res.json({ posts: posts.map((post) => normalizePost(post)) });
+  } catch (error) {
+    console.error('[posts] listMine error', error);
+    return res.status(500).json({ message: 'Unable to load posts' });
+  }
+};
+
 const getPost = async (req, res) => {
   const { postId } = req.params;
   try {
@@ -168,9 +188,39 @@ const updatePost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  if (!req.currentUser) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+
+  const { postId } = req.params;
+
+  try {
+    const query = resolveIdentifier(postId);
+    const post = await Post.findOne(query).exec();
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    if (!post.authorId.equals(req.currentUser._id)) {
+      return res.status(403).json({ message: 'You do not have permission to delete this post' });
+    }
+
+    await post.deleteOne();
+
+    return res.json({ message: 'Post deleted' });
+  } catch (error) {
+    console.error('[posts] delete error', error);
+    return res.status(500).json({ message: 'Unable to delete post' });
+  }
+};
+
 module.exports = {
   listPosts,
+  listMyPosts,
   getPost,
   createPost,
   updatePost,
+  deletePost,
 };

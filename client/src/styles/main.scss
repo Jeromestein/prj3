@@ -109,6 +109,19 @@ a {
   }
 }
 
+.dashboard-page {
+  width: min(1100px, 100%);
+  display: grid;
+  gap: 2rem;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
 .card {
   background: $color-surface-alt;
   border-radius: 16px;
@@ -219,9 +232,45 @@ a {
   }
 }
 
+.link-button {
+  background: transparent;
+  border: none;
+  color: $color-text;
+  font: inherit;
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  transition: background 150ms ease, color 150ms ease;
+
+  &:hover {
+    background: color.scale($color-surface, $lightness: 20%);
+  }
+
+  &.danger {
+    color: $color-danger;
+
+    &:hover {
+      background: color.scale($color-danger, $alpha: -70%);
+      color: $color-text;
+    }
+  }
+}
+
 .center-card {
   text-align: center;
   color: $color-text-muted;
+}
+
+.form-banner {
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  background: rgba(59, 130, 246, 0.18);
+  color: $color-text;
+
+  &.error {
+    background: color.scale($color-danger, $lightness: -10%);
+  }
 }
 
 .home-page {
@@ -749,6 +798,78 @@ a {
     margin: 0;
     line-height: 1.8;
     color: $color-text-muted;
+  }
+}
+
+.dashboard-posts {
+  background: $color-surface;
+  border-radius: 24px;
+  padding: clamp(2rem, 4vw, 2.75rem);
+  box-shadow: 0 20px 55px rgba(12, 18, 30, 0.3);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.dashboard-posts__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.dashboard-posts__empty {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+
+  p {
+    margin: 0;
+    color: $color-text-muted;
+  }
+}
+
+.dashboard-posts__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-posts__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid color.scale($color-surface, $lightness: 25%);
+
+  &:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+  }
+
+  .meta {
+    margin: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $color-text-muted;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 }
 
