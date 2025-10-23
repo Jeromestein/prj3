@@ -627,12 +627,19 @@ a {
     margin-top: 0.5rem;
 
     span {
-      background: color.scale($color-surface, $lightness: 10%);
-      border: 1px solid color.scale($color-surface, $lightness: 25%);
-      border-radius: 999px;
-      padding: 0.4rem 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      background: rgba(59, 130, 246, 0.18);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 12px;
+      padding: 0.45rem 1rem;
       font-size: 0.85rem;
-      color: $color-text-muted;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: $color-text;
     }
   }
 
@@ -734,11 +741,20 @@ a {
     color: $color-text-muted;
 
     .tag {
-      background: rgba(59, 130, 246, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 12px;
+      padding: 0.35rem 1rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
       color: $color-text;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      letter-spacing: 0.1em;
+    }
+    .time {
+      padding: 0.35rem 1rem;
     }
   }
 

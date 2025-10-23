@@ -70,14 +70,18 @@ const Posts = () => {
           )}
         </div>
         <aside className="newsletter-card">
-          <h2>Stay in the loop</h2>
-          <p>Every other Tuesday we share the best stories and practical templates in your inbox.</p>
-          <Link to="/signup" className="primary-button">
-            Subscribe
-          </Link>
-          <p className="disclaimer">
-            By subscribing you agree to receive content updates from Modern Blog.
+          <h2>Meet the editor</h2>
+          <p>
+            I archive my favourite AI experiments, product learnings, and notes on{' '}
+            <a href="https://www.errorplusone.com/" target="_blank" rel="noreferrer">
+              errorplusone.com
+            </a>
+            . Drop by for longer essays and behind-the-scenes breakdowns.
           </p>
+          <a href="https://www.errorplusone.com/" target="_blank" rel="noreferrer" className="primary-button">
+            Visit personal site
+          </a>
+          <p className="disclaimer">Fresh essays, projects, and prototypes updated regularly.</p>
         </aside>
       </section>
 
@@ -134,7 +138,7 @@ const Posts = () => {
             <article key={post._id} className="post-article">
               <div className="post-meta">
                 <span className="tag">{post.topic}</span>
-                <span>
+                <span className="time">
                   {dateFormatter.format(new Date(post.createdAt))} • {post.readTime}
                 </span>
               </div>
