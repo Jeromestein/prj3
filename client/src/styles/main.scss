@@ -573,11 +573,14 @@ a {
 
 .posts-controls {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  gap: 1rem;
 
   @media (max-width: 640px) {
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   label {
@@ -692,6 +695,10 @@ a {
   }
 }
 
+.post-detail .edit-link {
+  justify-self: flex-start;
+}
+
 .post-detail-header {
   display: grid;
   gap: 1rem;
@@ -800,6 +807,120 @@ a {
 
   .text-link {
     font-weight: 600;
+  }
+}
+
+.primary-button.ghost {
+  background: transparent;
+  color: $color-text;
+  border: 1px solid color.scale($color-surface, $lightness: 35%);
+  box-shadow: none;
+
+  &:hover {
+    background: color.scale($color-surface, $lightness: 20%);
+    box-shadow: none;
+  }
+}
+
+.post-editor-page {
+  width: min(850px, 100%);
+  background: $color-surface;
+  border-radius: 28px;
+  padding: clamp(2rem, 4vw, 3rem);
+  box-shadow: 0 24px 60px rgba(12, 18, 30, 0.28);
+}
+
+.post-form {
+  display: grid;
+  gap: 1.25rem;
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+
+  .form-subtext {
+    margin: 0;
+    color: $color-text-muted;
+  }
+
+  label {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: $color-text-muted;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid color.scale($color-surface, $lightness: 25%);
+    background: color.scale($color-surface, $lightness: 10%);
+    color: $color-text;
+    font-size: 1rem;
+    padding: 0.75rem 0.85rem;
+
+    &:focus {
+      outline: 2px solid $color-accent;
+      outline-offset: 1px;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-banner {
+    background: rgba(59, 130, 246, 0.18);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    color: $color-text;
+    font-size: 0.95rem;
+
+    &.error {
+      background: color.scale($color-danger, $lightness: -10%);
+    }
+  }
+}
+
+.markdown-body {
+  line-height: 1.8;
+  color: $color-text-muted;
+
+  h2,
+  h3,
+  h4 {
+    color: $color-text;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 1.25rem 1.5rem;
+  }
+
+  a {
+    color: $color-accent;
+
+    &:hover {
+      color: $color-accent-strong;
+    }
+  }
+
+  blockquote {
+    border-left: 3px solid rgba(59, 130, 246, 0.4);
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    color: $color-text;
+    background: color.scale($color-surface, $lightness: 8%);
+    border-radius: 0 12px 12px 0;
   }
 }
 

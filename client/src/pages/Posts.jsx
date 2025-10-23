@@ -1,60 +1,83 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { posts as postsData } from '../data/posts';
+import { fetchPosts } from '../api/posts';
+import { handleApiError } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
   month: 'short',
   day: 'numeric',
-  year: 'numeric',
 });
-
-const sortComparators = {
-  date: (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-  author: (a, b) => a.author.localeCompare(b.author),
-  topic: (a, b) => a.topic.localeCompare(b.topic),
-};
 
 const Posts = () => {
   const [sortKey, setSortKey] = useState('date');
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data } = await fetchPosts({ sort: sortKey });
+        if (isMounted) {
+          setPosts(data.posts || []);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(handleApiError(err));
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, [sortKey]);
 
   const categories = useMemo(
-    () => Array.from(new Set(postsData.map((post) => post.topic))),
-    []
+    () => Array.from(new Set(posts.map((post) => post.topic))).filter(Boolean),
+    [posts]
   );
-
-  const sortedPosts = useMemo(() => {
-    const comparator = sortComparators[sortKey] ?? sortComparators.date;
-    return [...postsData].sort(comparator);
-  }, [sortKey]);
 
   return (
     <div className="posts-page">
       <section className="posts-hero">
         <div className="hero-copy">
           <p className="eyebrow">Posts</p>
-          <h1>Ideas, research, and field notes from the Modern Blog team</h1>
+          <h1>Team stories, research, and behind-the-scenes insights</h1>
           <p>
-            Explore deep dives on publishing workflows, behind-the-scenes strategy breakdowns, and
-            interviews with creators building tomorrow&apos;s media brands.
+            Explore the latest operational playbooks, editorial experiments, and creator interviews
+            from the Modern Blog team.
           </p>
-          <div className="category-chips" role="list">
-            {categories.map((category) => (
-              <span key={category} role="listitem">
-                {category}
-              </span>
-            ))}
-          </div>
+          {categories.length > 0 && (
+            <div className="category-chips" role="list">
+              {categories.map((category) => (
+                <span key={category} role="listitem">
+                  {category}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <aside className="newsletter-card">
           <h2>Stay in the loop</h2>
-          <p>
-            Get the latest stories and templates every other Tuesday. Zero fluff, all practical
-            insights.
-          </p>
+          <p>Every other Tuesday we share the best stories and practical templates in your inbox.</p>
           <Link to="/signup" className="primary-button">
-            Join newsletter
+            Subscribe
           </Link>
-          <p className="disclaimer">By joining, you agree to receive updates from Modern Blog.</p>
+          <p className="disclaimer">
+            By subscribing you agree to receive content updates from Modern Blog.
+          </p>
         </aside>
       </section>
 
@@ -71,26 +94,60 @@ const Posts = () => {
             <option value="topic">Topic (A–Z)</option>
           </select>
         </label>
+        {isAuthenticated && (
+          <Link to="/posts/new" className="primary-button ghost">
+            Write a post
+          </Link>
+        )}
       </section>
 
-      <section className="posts-grid">
-        {sortedPosts.map((post) => (
-          <article key={post.id} className="post-article">
-            <div className="post-meta">
-              <span className="tag">{post.topic}</span>
-              <span>
-                {dateFormatter.format(new Date(post.createdAt))} • {post.readTime}
-              </span>
-            </div>
-            <h2>{post.title}</h2>
-            <p className="excerpt">{post.excerpt}</p>
-            <p className="byline">By {post.author}</p>
-            <Link to={`/posts/${post.id}`} className="text-link">
-              Read story →
+      {loading && (
+        <div className="center-card">
+          <p>Loading posts...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="center-card">
+          <p>{error}</p>
+        </div>
+      )}
+
+      {!loading && !error && posts.length === 0 && (
+        <div className="center-card">
+          <p>No posts yet—be the first to share what you&apos;re working on.</p>
+          {isAuthenticated ? (
+            <Link to="/posts/new" className="primary-button">
+              Publish now
             </Link>
-          </article>
-        ))}
-      </section>
+          ) : (
+            <Link to="/signup" className="text-link">
+              Create an account to start publishing →
+            </Link>
+          )}
+        </div>
+      )}
+
+      {!loading && !error && posts.length > 0 && (
+        <section className="posts-grid">
+          {posts.map((post) => (
+            <article key={post._id} className="post-article">
+              <div className="post-meta">
+                <span className="tag">{post.topic}</span>
+                <span>
+                  {dateFormatter.format(new Date(post.createdAt))} • {post.readTime}
+                </span>
+              </div>
+              <h2>{post.title}</h2>
+              <p className="excerpt">{post.excerpt}</p>
+              <p className="byline">By {post.authorName}</p>
+              <Link to={`/posts/${post.slug || post._id}`} className="text-link">
+                Read more →
+              </Link>
+            </article>
+          ))}
+        </section>
+      )}
     </div>
   );
 };

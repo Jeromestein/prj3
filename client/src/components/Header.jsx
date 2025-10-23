@@ -22,6 +22,7 @@ const Header = () => {
         {isAuthenticated ? (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/posts/new">Write</NavLink>
             <button type="button" className="link-button" onClick={handleLogout}>
               Logout
             </button>
