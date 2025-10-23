@@ -1,33 +1,50 @@
 # Modern Blog Websites
 
-Full-stack authentication starter built with React, Express, MongoDB, and session-based security. The project ships with a responsive SASS-powered UI, optional HTTPS server, and offline-first PWA support.
+Full-stack blog platform built with React, Express, and MongoDB. Visitors can browse public articles while authenticated authors create, edit, and delete Markdown-powered posts directly from the dashboard. The project ships with a responsive SASS UI, optional HTTPS server, and offline-first PWA support.
 
 ## Highlights
 
-- **React 18 + Vite** client with React Router and service worker driven PWA.
-- **Express 4** API backed by **MongoDB/Mongoose** with session & cookie authentication.
+- **React 18 + Vite** single-page client with React Router, context-driven auth, and service worker powered PWA.
+- **Post authoring workflow**: Markdown editor, live routing, and dashboard tools to view, edit, and delete personal posts.
+- **Express 4 + MongoDB/Mongoose** API with session & cookie authentication, slug generation, and author-scoped access control.
 - **Secure by default**: helmet, compression, Mongo-backed session store, SSL-ready bootstrapping.
-- **SASS design system** with reusable layout, buttons, and auth forms.
+- **SASS design system** covering cards, typography, dashboard layouts, and reusable button styles.
 - **Offline support** via custom service worker, installable manifest, and cached shell.
+
+## Feature Overview
+
+- **Public pages** (`/`, `/posts`, `/contact`) with responsive layouts and in-app navigation.
+- **Authentication** (`/signup`, `/login`) backed by session cookies; `ProtectedRoute` guards private routes.
+- **Post management**
+  - Create and edit posts in Markdown; content is rendered via `react-markdown` + `remark-gfm`.
+  - Automatic slug generation, topic tags, and read-time metadata.
+  - `/posts` index supports sorting by date, author, or topic; `/posts/:slug` renders full content.
+  - Dashboard lists the signed-in author's posts with quick links to view, edit, refresh, or delete.
+- **API**
+  - `GET /api/posts` - Public list with sort controls.
+  - `GET /api/posts/:idOrSlug` - Retrieve a single post.
+  - `GET /api/posts/mine` - Authenticated author list.
+  - `POST /api/posts`, `PUT /api/posts/:id`, `DELETE /api/posts/:id` - Authenticated CRUD with author checks.
+  - Auth endpoints remain available under `/api/auth/*`.
 
 ## Project Structure
 
 ```
 .
-├── config.env               # Server environment variables
-├── server.js                # Express bootstrap with HTTP + HTTPS
-├── src/
-│   ├── app.js               # Express app factory
-│   ├── config/              # DB + session config
-│   ├── controllers/         # Auth controller
-│   ├── middleware/          # Session/user middleware
-│   ├── models/              # Mongoose models
-│   └── routes/              # API route registration
-└── client/
-    ├── index.html
-    ├── package.json
-    ├── public/              # Manifest, service worker, offline fallback
-    └── src/                 # React application
+|-- config.env               # Server environment variables
+|-- server.js                # Express bootstrap with HTTP + HTTPS
+|-- src/
+|   |-- app.js               # Express app factory
+|   |-- config/              # DB + session config
+|   |-- controllers/         # Auth + post controllers
+|   |-- middleware/          # Session/user middleware
+|   |-- models/              # Mongoose models
+|   `-- routes/              # API route registration
+`-- client/
+    |-- index.html
+    |-- package.json
+    |-- public/              # Manifest, service worker, offline fallback
+    `-- src/                 # React application
 ```
 
 ## Prerequisites
@@ -108,6 +125,14 @@ When `NODE_ENV=production`, the Express server serves the compiled client from `
 - `GET /api/auth/me`: returns the current authenticated user (requires session).
 
 Session data lives in MongoDB via `connect-mongo`, and the React client always calls the API with `credentials: include` so cookies are exchanged automatically.
+
+## Posts Workflow
+
+- Posts are persisted in the `Post` collection with title, slug, topic, excerpt, read time, Markdown body, author references, and timestamps.
+- Slugs are generated server-side (`generateSlug`) and remain unique across edits.
+- Authors can manage their own content only; every mutation route verifies the current session user before proceeding.
+- Markdown content is stored as plain text in MongoDB and rendered client-side with GitHub Flavored Markdown support.
+- The dashboard retrieves `/api/posts/mine` to show authored posts, and delete operations ask for confirmation before calling the API.
 
 ## PWA & Offline Mode
 
