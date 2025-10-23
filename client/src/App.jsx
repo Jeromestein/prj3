@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Contact from './pages/Contact';
 import Posts from './pages/Posts';
+import Post from './pages/Post';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 
@@ -15,6 +16,7 @@ const App = () => (
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
+        <Route path="/posts/:postId" element={<Post />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/contact" element={<Contact />} />
