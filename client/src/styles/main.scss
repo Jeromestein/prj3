@@ -540,6 +540,37 @@ a {
   }
 }
 
+.site-footer--compact {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  gap: 1rem;
+
+  .footer-brand {
+    gap: 0.5rem;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.scroll-top-button {
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color.scale($color-surface, $lightness: 25%);
+  color: $color-text;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 150ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
 .auth-cta {
   text-align: center;
   font-size: 1rem;

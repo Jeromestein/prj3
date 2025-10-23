@@ -4,13 +4,13 @@ import { useAuth } from '../context/AuthContext';
 import { fetchPosts } from '../api/posts';
 import { handleApiError } from '../api/client';
 
-const fallbackHero = {
-  category: 'AI STRATEGY',
-  title: 'Designing an AI-native publishing stack',
+const heroContent = {
+  badge: 'Community',
+  category: 'Open AI Knowledge Base',
+  title: 'Share and discover the most useful AI intel',
   excerpt:
-    'Discover how modern teams productionize AI safely - from data pipelines to guardrails and continuous evaluation.',
-  cta: 'Explore playbook',
-  link: '/posts',
+    'Modern AI Blog is a community space where anyone can publish bite-sized updates about emerging models, tools, and responsible workflows. Read what practitioners are shipping and add your own findings in minutes.',
+  cta: 'Explore posts',
 };
 
 const formatDate = (isoDate) =>
@@ -54,25 +54,18 @@ const Home = () => {
     };
   }, []);
 
-  const heroPost = posts[0];
-  const heroCategory = heroPost?.topic ?? fallbackHero.category;
-  const heroTitle = heroPost?.title ?? fallbackHero.title;
-  const heroExcerpt = heroPost?.excerpt ?? fallbackHero.excerpt;
-  const heroLink = heroPost ? `/posts/${heroPost.slug || heroPost._id}` : fallbackHero.link;
-  const heroCta = heroPost ? 'Read insight' : fallbackHero.cta;
-
   const latestPosts = useMemo(() => posts.slice(0, 3), [posts]);
 
   return (
     <div className="home-page">
       <section className="hero-card">
         <div className="hero-content">
-          <span className="hero-badge">AI</span>
-          <p className="hero-category">{heroCategory}</p>
-          <h1>{heroTitle}</h1>
-          <p className="hero-excerpt">{heroExcerpt}</p>
-          <Link className="primary-button" to={heroLink}>
-            {heroCta}
+          <span className="hero-badge">{heroContent.badge}</span>
+          <p className="hero-category">{heroContent.category}</p>
+          <h1>{heroContent.title}</h1>
+          <p className="hero-excerpt">{heroContent.excerpt}</p>
+          <Link className="primary-button" to="/posts">
+            {heroContent.cta}
           </Link>
         </div>
       </section>
@@ -120,65 +113,32 @@ const Home = () => {
         )}
       </section>
 
-      <footer className="site-footer">
+      <footer className="site-footer site-footer--compact">
         <div className="footer-brand">
           <p className="brand-name">@ Jiayi Wang</p>
           <p>
-            Donec nec ante nibh. Vestibulum tincidunt lectus sed magna fringilla sagittis. Nulla
-            facilisi.
+            Sharing practical AI intel with the community. Publish a post, learn something new.
+          </p>
+          <p>
+            <a href="https://www.errorplusone.com/" target="_blank" rel="noreferrer">
+              errorplusone.com
+            </a>{' '}
+            ·{' '}
+            <Link to="/contact">Contact</Link>
+            ·{' '}
+            <a href="mailto:hello@modernblog.ai">Email</a>
           </p>
           <p className="legal">© 2025 Jiayi Wang. All rights reserved.</p>
         </div>
 
-        <div className="footer-columns">
-          <div>
-            <h4>Tags</h4>
-            <ul className="tag-cloud">
-              {['Model Ops', 'Edge AI', 'Safety', 'Agents', 'Data Quality', 'Research'].map((tag) => (
-                <li key={tag}>
-                  <Link to="/posts">{tag}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4>Social</h4>
-            <ul>
-              {['Twitter', 'Facebook', 'Instagram', 'YouTube'].map((item) => (
-                <li key={item}>
-                  <Link to="/">{item}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4>About</h4>
-            <ul>
-              <li>
-                <Link to="/">Shop</Link>
-              </li>
-              <li>
-                <Link to="/">Authors</Link>
-              </li>
-              <li>
-                <Link to="/">Sitemap</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="scroll-top">
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Back to top"
-          >
-            ↑
-          </button>
-        </div>
+        <button
+          type="button"
+          className="scroll-top-button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
       </footer>
 
       <section className="auth-cta">

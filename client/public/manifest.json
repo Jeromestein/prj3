@@ -1,7 +1,7 @@
 {
-  "name": "Modern Blog Website",
-  "short_name": "Blog Website",
-  "description": "A secure React PWA with Express and MongoDB backend.",
+  "name": "Modern AI Blog",
+  "short_name": "AI Blog",
+  "description": "Community-driven AI blog where anyone can publish and discover practical updates about models, tools, and workflows.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b111a",
