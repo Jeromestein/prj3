@@ -9,96 +9,61 @@ const DEFAULT_AUTHOR = {
   roles: ['editor'],
 };
 
+const REMOVED_SLUGS = ['chatgpt-atlas-product-tour', 'nano-banana-inference'];
+
 const seedPosts = [
   {
     slug: 'anthropic-universal-skills',
     title: 'Anthropic Skills: Building Universal AI Tools',
-    topic: 'AI Platforms',
+    topic: 'Workflow Automation',
     excerpt:
-      "A deep dive into Anthropic's new Skills framework and what universal, re-usable AI workflows mean for builders.",
-    readTime: '9 min read',
+      'Understand what Anthropic Skills are, how they load dynamically, and why they capture institutional workflows for Claude.',
+    readTime: '10 min read',
     createdAt: new Date('2024-09-19T10:00:00.000Z'),
-    content: [
-      '# Why Anthropic Skills Matter',
-      '',
-      "Anthropic's Skills announcement introduces modular capabilities that teams can wire together to build trustworthy agents. Each Skill encapsulates a permissioned behavior, from research to code review, and can be shared across products.",
-      '',
-      '## Modular safety guardrails',
-      '',
-      "Skills inherit Anthropic's safety policies, meaning every workflow automatically benefits from context filtering, red-teaming, and policy updates. That frees startups from reinventing compliance baselines.",
-      '',
-      '## Composable workflows',
-      '',
-      'Product squads can stack Skills to orchestrate complex pipelines: imagine pairing *Research Synthesizer* with *Policy Checker* and a *Code Reviewer* Skill to ship governance-friendly releases in hours.',
-      '',
-      '## Getting started',
-      '',
-      '1. Review the [Skills launch post](https://www.anthropic.com/news/skills) for current modules.',
-      '2. Map repeatable tasks in your org - anything that requires consistent judgement is a candidate.',
-      '3. Use the sandbox environment to connect Skills and monitor telemetry before going live.',
-      '',
-      '> The future of AI platforms is collaborative. Skills offer a blueprint for sharing capabilities without sacrificing oversight.',
-    ].join('\n'),
-  },
-  {
-    slug: 'chatgpt-atlas-product-tour',
-    title: 'Navigating ChatGPT Atlas for Production Teams',
-    topic: 'AI Operations',
-    excerpt:
-      "We road-test OpenAI's ChatGPT Atlas, exploring how product and data teams can catalog prompts, governance, and telemetry in one hub.",
-    readTime: '8 min read',
-    createdAt: new Date('2024-08-28T12:30:00.000Z'),
-    content: [
-      '# Atlas as your AI control center',
-      '',
-      'ChatGPT Atlas ships with dashboards for prompt governance, usage analytics, and change tracking. For organizations graduating from experimental chatbots, Atlas centralizes the operational heartbeat.',
-      '',
-      '## Versioning prompts the right way',
-      '',
-      'Atlas treats prompts like code. You can tag releases, compare diffed changes, and roll back to stable versions when experiments go sideways. That alone can save product squads from late-night incident bridges.',
-      '',
-      '## Observability baked in',
-      '',
-      'The insight panels reveal latency hotspots, cost breakdowns by workspace, and content category drift. Pair it with usage alerts to spot anomalies before stakeholders do.',
-      '',
-      '## Rollout checklist',
-      '',
-      '- Assign workspace owners and reviewers.',
-      '- Connect Atlas to your identity provider for audit trails.',
-      '- Establish SLAs for model updates and communicate them in Atlas announcements.',
-      '',
-      'Atlas turns reactive firefighting into proactive governance - exactly what enterprises need as AI workloads scale.',
-    ].join('\n'),
-  },
-  {
-    slug: 'nano-banana-inference',
-    title: 'Nano Banana: Tiny Models, Production-Grade Impact',
-    topic: 'Edge AI',
-    excerpt:
-      'Nano Banana shows how sub-billion parameter models can unlock blazing-fast inference on commodity hardware without sacrificing quality.',
-    readTime: '7 min read',
-    createdAt: new Date('2024-07-15T09:15:00.000Z'),
-    content: [
-      '# Meet Nano Banana',
-      '',
-      'Nano Banana is the latest proof that small models can deliver heavyweight results. It runs comfortably on consumer GPUs and even CPU-only servers, opening AI features to teams without hyperscaler budgets.',
-      '',
-      '## Performance highlights',
-      '',
-      '- **Latency:** Under 120ms for summarization tasks on a single T4.',
-      '- **Memory:** Fits inside 4 GB VRAM with room for adapters.',
-      '- **Quality:** Benchmarks within 4 points of models 3x its size on common QA suites.',
-      '',
-      '## Deployment recipe',
-      '',
-      '1. Quantize weights with the bundled 4-bit toolkit.',
-      '2. Host behind a lightweight FastAPI service.',
-      '3. Cache warm prompts to keep tail latency predictable.',
-      '',
-      '## Why it matters',
-      '',
-      'The next wave of AI adoption will hinge on practicality. Nano Banana proves you can ship delightful experiences without rewriting your infrastructure.',
-    ].join('\n'),
+    content: `# What Are Anthropic Skills?
+
+Skills are curated folders of instructions, scripts, and reference files that Claude loads on demand to perform specialized work. Instead of keeping every policy or workflow in the conversation context, Skills let teams package procedures and surface them only when they are needed.
+
+## Availability and preview status
+
+Skills are currently available as a feature preview for Claude Pro, Max, Team, and Enterprise plans when code execution is enabled. They are also in beta for Claude Code workflows and accessible via the API for builders using the code execution tool.
+
+## How Skills work
+
+Claude uses progressive disclosure to decide which Skills to apply. When you submit a task, Claude reviews the Skills available in the workspace, loads the ones that match the request, and follows the instructions or scripts inside. This prevents the context window from overflowing while still giving Claude everything it needs to complete a job accurately.
+
+## Types of Skills
+
+- **Anthropic Skills**: maintained by Anthropic and automatically invoked for common tasks such as advanced document creation in Excel, Word, PowerPoint, or PDF formats.
+- **Custom Skills**: written by you or your organisation to encode brand guidelines, meeting note templates, automation scripts, or any domain-specific workflow your team relies on.
+
+### Sample use cases for custom Skills
+
+- Apply brand style guides to slides, documents, and marketing assets.
+- Generate outbound communications that follow approved company templates.
+- Structure meeting notes or research summaries in organisation-specific formats.
+- Create tasks in issue trackers such as JIRA, Asana, or Linear with the right labels and assignees.
+- Automate bespoke data analysis workflows or personal productivity rituals.
+
+## Key benefits
+
+- **Performance**: Claude gains specialised capabilities for document creation, data analysis, and other repeatable tasks where generic instructions fall short.
+- **Knowledge capture**: Teams can package institutional knowledge and workflows so every teammate benefits.
+- **Easy authoring**: Skills are written in Markdown and can optionally include executable scripts—no heavy engineering required for simple automations.
+
+## How Skills compare to other Claude features
+
+- **Skills vs. Projects**: Projects provide static background context scoped to a workspace. Skills are procedural and activate dynamically wherever needed.
+- **Skills vs. MCP**: MCP connects Claude to external services or data sources. Skills tell Claude how to use those tools effectively. They work best together.
+- **Skills vs. Custom Instructions**: Custom instructions always apply. Skills only load when relevant, making them ideal for specific workflows.
+
+## Getting started
+
+1. Audit the workflows where consistency matters most and outline them in plain language.
+2. Capture the steps as Markdown instructions; add scripts if automation helps.
+3. Upload your new Skills, enable code execution, and test them in the Skills sandbox before rolling them out to your team.
+
+For a deeper dive, read the [official Skills documentation](https://www.anthropic.com/news/skills) and the Agent Skills guide in Claude Docs.`,
   },
 ];
 
@@ -118,8 +83,23 @@ const ensureSeedAuthor = async () => {
 
 const ensurePost = async (postData, author) => {
   const existing = await Post.findOne({ slug: postData.slug });
+
   if (existing) {
-    return false;
+    existing.title = postData.title;
+    existing.topic = postData.topic;
+    existing.excerpt = postData.excerpt;
+    existing.readTime = postData.readTime;
+    existing.content = postData.content;
+    existing.authorId = author._id;
+    existing.authorName = author.name;
+
+    if (postData.createdAt) {
+      existing.createdAt = postData.createdAt;
+    }
+
+    existing.updatedAt = postData.createdAt || new Date();
+    await existing.save();
+    return { created: false, updated: true };
   }
 
   const created = await Post.create({
@@ -136,25 +116,38 @@ const ensurePost = async (postData, author) => {
     );
   }
 
-  return true;
+  return { created: true, updated: false };
 };
 
 const ensureInitialPosts = async () => {
   try {
     const author = await ensureSeedAuthor();
     let createdCount = 0;
+    let updatedCount = 0;
+
+    if (REMOVED_SLUGS.length > 0) {
+      const removalResult = await Post.deleteMany({ slug: { $in: REMOVED_SLUGS } });
+      if (removalResult.deletedCount) {
+        console.log(`[seed] Removed ${removalResult.deletedCount} deprecated AI posts`);
+      }
+    }
 
     // eslint-disable-next-line no-restricted-syntax
     for (const post of seedPosts) {
       // eslint-disable-next-line no-await-in-loop
-      const created = await ensurePost(post, author);
-      if (created) {
+      const result = await ensurePost(post, author);
+      if (result.created) {
         createdCount += 1;
+      }
+      if (result.updated) {
+        updatedCount += 1;
       }
     }
 
-    if (createdCount > 0) {
-      console.log(`[seed] Inserted ${createdCount} initial AI posts`);
+    if (createdCount > 0 || updatedCount > 0) {
+      console.log(
+        `[seed] Synced AI posts (created: ${createdCount}, updated: ${updatedCount})`
+      );
     }
   } catch (error) {
     console.error('[seed] Failed to ensure initial posts:', error.message);
